@@ -1,20 +1,18 @@
 import pyautogui
-from PIL import Image
+from PIL import Image,ImageGrab
 import pytesseract
 import os
 class hexinAPI:
     def __init__(self):
         pass
 
-    def language_translate(self):
-        # 可以把这个代码给优化一下
-        # 两个截图给合并成一个截图 使用PIL
+    def language_translate(self,quyu):
+        """
+        quyu - 截图区域的坐标（x,y,结束x,结束y）
 
-        im1 = pyautogui.screenshot(region=(46,700,600,400),imageFilename="img.png") #!TODO 截图区域，这里未来需要变成可设置的
-        img = Image.open("./img.png")
-        pixel_color = img.getpixel((15,350))
-        # if (pixel_color == (0,195,255) or pixel_color == (255,252,67)): #!TODO 根据颜色判定是否弹出消息输入框
-        text = pytesseract.image_to_string(img.crop((60,25,570,330)),lang="eng+chi_sim+kor")
+        """
+        im1 = ImageGrab.grab(quyu)
+        text = pytesseract.image_to_string(im1,lang="eng+kor+chi_sim")    # 今天把这个也给精简了
         os.system("cls")
         messages_list = []
         for i in text.split("\n"): # 循环消息列表来判定识别的文字是否为玩家的语言
@@ -27,4 +25,4 @@ class hexinAPI:
         return messages_list   # 返回玩家消息列表
 
 if __name__=="__main__":
-    print (hexinAPI().language_translate())
+    print (hexinAPI().language_translate(quyu=(46,700,640,1100)))

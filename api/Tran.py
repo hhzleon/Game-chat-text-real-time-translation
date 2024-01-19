@@ -12,9 +12,9 @@ def baidu_translator_api(from_lang,to_lang,text):
         "q":text,
         "from":from_lang,
         "to":to_lang,
-        "appid":"", # 需要补充
+        "appid":"appid补充", # 需要补充
         "salt":salt,
-        "sign":hashlib.md5(("需要补充密钥appid"+text+str(salt)+"需要补充密钥").encode()).hexdigest()
+        "sign":hashlib.md5(("appid补充"+text+str(salt)+"密钥补充").encode()).hexdigest()
     }
     web = requests.post(url=url,headers=header,data=data)
     data = web.json()

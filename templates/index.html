@@ -4,9 +4,39 @@
   <title>守望先锋翻译器</title>
   <script src="./vue.min.js"></script>
   <style>
+        *{
+          margin: 0;
+          padding: 0;
+        }
         textarea{
+            border: 0;
             width: 100%;
+            color: #fff;
+            background-color: rgba(109, 46, 46, 0.515);
+            font-size: 16px;
             height: 200px;
+        }
+        input {
+            width: 270px;
+            height: 30px;
+        }
+        button{
+          height: 30px;
+          width: 100px;
+          border: 0px;
+          
+          
+        }
+        button:hover{
+          border-bottom-width: 5px;
+          border-bottom-style: solid;
+          border-bottom-color: orange;
+        }
+        #app{
+          background-color: pink;
+          background-image: url(./img/1451f5cce51511698881f8609ad27a401a58b539.png);
+          background-repeat: no-repeat;
+          background-size: cover;
         }
   </style>
 </head>
@@ -15,10 +45,10 @@
     <textarea v-model="text" disabled rows="5" cols="30"></textarea>
     <br>
     <input v-model="inputText" type="text" placeholder="输入文本">
-    <button @click="">翻译</button>
-    <button @click="submit">翻译消息列表</button>
+    <button @click="tranAndCopy">翻译</button>
+    <button @click="submit">翻译列表</button>
     <br>
-    <p>输入的文本: {{ inputText }}</p>
+    <p>输入的文本: {{ tranText }}</p>
   </div>
 
   <script>
@@ -26,7 +56,8 @@
       el: '#app',
       data: {
         text: '',
-        inputText: ''
+        inputText: '',
+        tranText: ""
       },
       methods: {
         submit: function() {
@@ -40,6 +71,13 @@
                 });
             });
         },
+        tranAndCopy: function(){
+          // 将用户输入的中文翻译并copy到粘贴板
+          var that = this
+          pywebview.api.tranMessage(that.inputText).then((result)=>{
+            that.tranText = result
+          })
+        }
 
 
       }
