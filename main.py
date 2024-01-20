@@ -2,6 +2,7 @@ from api.Api import hexinAPI
 from api.Tran import baidu_translator_api
 import pyperclip as pc
 import webview
+import keyboard
 class Api:
     def tranPlayers_message(self):
         # 这里实现你的方法
@@ -18,18 +19,30 @@ class Api:
         pc.copy(kor_message)
         return kor_message
 
-def onshow(window):
-    # 检测到窗口被切换了就直接翻译
-    window.evaluate_js("submit()")
+a = False # 是否隐藏
+
+
+def hotkey(window):
+    # 热键激活
+    global a
+    
+    # print (a)
+    if (a):
+        a = False
+        window.show()
+        # 当显示的时候注入js翻译
+        webview.windows[0].evaluate_js("submit()")
+    else:
+        a = True
+        window.hide()
 
 
 
 
 if __name__ == '__main__':
     api = Api()
-    window = webview.create_window("OW2翻译器", "templates\index.html", width=600, height=277,js_api=api,frameless=True)
+    window = webview.create_window("OW2翻译器", "templates\index.html", width=600, height=277,js_api=api,frameless=True,resizable=False)
+    keyboard.add_hotkey("alt+/",hotkey,(window,))
     webview.start(debug=False)
-    window.events.shown += onshow(window=window)
-    # api.tranPlayers_message()
 
 

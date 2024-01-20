@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>守望先锋翻译器</title>
+  <title>守望先锋翻译器 alt+/ 显示与隐藏</title>
   <script src="./vue.min.js"></script>
   <style>
         *{
@@ -15,6 +15,7 @@
             background-color: rgba(109, 46, 46, 0.515);
             font-size: 16px;
             height: 200px;
+            resize: none;
         }
         input {
             width: 270px;
@@ -42,16 +43,23 @@
 </head>
 <body>
   <div id="app">
-    <textarea v-model="text" disabled rows="5" cols="30"></textarea>
+    <textarea class="pywebview-drag-region" v-model="text" disabled rows="5" cols="30"></textarea>
     <br>
     <input v-model="inputText" type="text" placeholder="输入文本">
     <button @click="tranAndCopy">翻译</button>
     <button @click="submit">翻译列表</button>
     <br>
-    <p>输入的文本: {{ tranText }}</p>
+    <p>翻译: {{ tranText }}--alt+/显示-隐藏</p>
   </div>
 
   <script>
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+    });
+
+
+
+
     new Vue({
       el: '#app',
       data: {
@@ -59,6 +67,10 @@
         inputText: '',
         tranText: ""
       },
+      mounted() {
+        window.submit = this.submit;  //绑定作用域
+      }
+      ,
       methods: {
         submit: function() {
         //   this.inputText = this.text;
