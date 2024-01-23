@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置页面</title>
+    <script src="./vue.min.js"></script>
+    <style>
+        .location{
+            margin-left: 20px;
+        }
+        .location>input{
+            width: 50px;
+            height: 30px;
+            border: 2px solid #000;
+        }
+        .location>button{
+            width: 50px;
+            height: 30px;
+            border: 2px solid #000;
+        }
+        .keyAndAppid>input{
+            width: 300px;
+            height: 30px;
+            border: 2px solid #000;
+            margin-top: 20px;
+            margin-left: 20px;
+        }
+        .keyAndAppid>button {
+            margin-top: 20px;
+            margin-left: 20px;
+            width: 100px;
+            height: 30px;
+            border: 2px solid #000;
+        }
+        button:hover{
+            transition: all 0.3s;
+            transform: translate(0,-5px);
+        }
+    </style>
+</head>
+    <div id="app">
+        <div class="location">
+            <input placeholder="x" v-model="window_location.x" type="text"></input>
+            <input placeholder="y" v-model="window_location.y" type="text"></input>
+            <input placeholder="lastX" v-model="window_location.lastX" type="text"></input>
+            <input placeholder="lastY" v-model="window_location.lastY" type="text"></input>
+            <button @click="ceshijietu">测试</button>
+        </div>
+        <div class="keyAndAppid">
+            <input type="text" v-model="appid"  placeholder="请输入appid">
+            <input type="text" v-model="key" placeholder="请输入密钥">
+            <button @click="save">保存</button>
+        </div>
+        <div>
+            1. 保存完毕以后记得手动重启程序来使配置生效。<br>
+            2. 本程序不断更新中，请加入QQ群：281666103来获取最新版本。<br>
+            3. 功能简单，但是完善需要各位一份力量！<br>
+            4. 本程序已经在github上开源。
+        </div>
+
+    </div>
+<body>
+
+
+
+    <script>
+
+        window.addEventListener("pywebviewready",()=>{
+            // pywebview.api.getSetting()
+            app.getSetting()
+        })
+
+
+
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                window_location:{
+                    x:"",
+                    y:"",
+                    lastX:"",
+                    lastY:""
+                },
+                appid:"",
+                key:""
+            },
+            methods: {
+                ceshijietu(){
+                    if (this.window_location.x=="" || this.window_location.y=="" || this.window_location.lastX=="" || this.window_location.lastY==""){
+                        alert("请把要截图的位置填写完整")
+                        return
+                    }
+                    var that = this
+                    pywebview.api.test(that.window_location.x,that.window_location.y,that.window_location.lastX,that.window_location.lastY).then(function(result){
+                        
+                    
+                    
+                    });
+                },
+                save(){
+                    var that = this
+                    if (this.window_location.x=="" || this.window_location.y=="" || this.window_location.lastX=="" || this.window_location.lastY=="" ||this.appid=="" || this.key==""){
+                        alert("上面的配置项缺一不可哦")
+                        return
+                    }
+                    pywebview.api.save(that.window_location.x,that.window_location.y,that.window_location.lastX,that.window_location.lastY,that.appid,that.key).then(function(result){
+                        if (result){
+                            alert ("保存成功")
+                        }
+                    });
+                },
+                getSetting(){
+                    var that = this
+                    pywebview.api.getSetting().then(function(result){
+                        that.window_location.x = result.x
+                        that.window_location.y = result.y
+                        that.window_location.lastX = result.lastX
+                        that.window_location.lastY = result.lastY
+                        that.appid = result.appid
+                        that.key = result.key
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
